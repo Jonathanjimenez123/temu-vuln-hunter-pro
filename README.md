@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 ## 📌 Descripción del Proyecto
 
