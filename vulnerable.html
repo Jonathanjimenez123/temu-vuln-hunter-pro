@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PoC XSS Reflejado</title>
+</head>
+<body>
+  <h1>Simulación de página vulnerable</h1>
+  <div id="output"></div>
+
+  <script>
+    // Captura el parámetro redirect de la URL
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get("redirect");
+
+    if (redirect) {
+      // ❌ Inserta contenido sin sanitizar => vulnerable a XSS reflejado
+      document.getElementById("output").innerHTML = redirect;
+    } else {
+      document.getElementById("output").textContent = "No se encontró parámetro 'redirect'.";
+    }
+  </script>
+</body>
+</html>
+
+

