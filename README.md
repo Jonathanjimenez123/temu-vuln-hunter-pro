@@ -1,5 +1,3 @@
-#📄 Contenido de README.md:
-
 # 🛡️ temu-vuln-hunter-pro
 
 > PoC profesional para explotar una vulnerabilidad crítica de Open Redirect + XSS reflejado en **Temu**, demostrando robo de cookies y escalada a toma de cuenta.
